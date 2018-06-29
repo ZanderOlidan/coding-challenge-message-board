@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', passport.authenticate('jwt',{session:false}), (req, res) => {
+app.get('/', passport.authenticate('jwt',{
+    session:false,
+    failureRedirect: '/login'
+}), (req, res) => {
     res.send("Hello world");
 })
 

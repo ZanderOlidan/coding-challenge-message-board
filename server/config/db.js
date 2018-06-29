@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const DB_URL = 'mongodb://db/users';
+const DB_URL = 'mongodb://db/message-board';
 
 const initalizeMongo = () => {
     mongoose.connect(DB_URL);

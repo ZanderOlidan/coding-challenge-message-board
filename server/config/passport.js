@@ -20,12 +20,10 @@ passport.use(new JWTStrategy({
     secretOrKey: process.env.JWT_SECRET
     }, 
     (payload, done) => {
-        return User.findById(payload.id)
-            .then(user => {
-                return done(null, user);
-            })
-            .catch(err => {
-                return done(err);
-            })
+        return User.findById(payload.id, (err, user) => {
+            if (err) return done(err, false);
+            if (user) return done(null, user);
+            else return done(null, false);
+        })
     }
 ))
