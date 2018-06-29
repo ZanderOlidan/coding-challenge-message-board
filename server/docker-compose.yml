@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    restart: always
+  web:
+    image: node-express
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - "5000:3000"
+    links:
+      - db
+    command: npm run serve
+    depends_on:
+      - "db"
+  adminmongo:
+    image: "mrvautin/adminmongo"
+    ports:
+      - "1234:1234"
