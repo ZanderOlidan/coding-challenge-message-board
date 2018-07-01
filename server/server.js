@@ -5,9 +5,10 @@ import bodyParser from 'body-parser';
 import './config/env';
 import './config/db';
 import './config/passport';
-import * as authController from './controllers/auth.controller';
 
-import user from './routes/user.route';
+import AuthRouter from './routes/auth.route';
+import UserRouter from './routes/user.route';
+import PostRouter from './routes/post.route';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,20 +18,27 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', passport.authenticate('jwt',{
-    session:false,
-    failureRedirect: '/login'
-}), (req, res) => {
-    res.send("Hello world");
+app.get('/', (req, res) => {
+    res.send('Hello World!');
 })
 
-app.post('/register', (req,res) => {
-    authController.register(req, res);
-})
+app.use(
+    '/messages', 
+    passport.authenticate( 'jwt', { session:false }),
+    PostRouter
+);
 
-app.post('/login', (req, res, next) => {
-    authController.login(req,res, next);
-})
+
+// app.post('/register', (req,res) => {
+//     authController.register(req, res);
+// })
+
+// app.post('/login', (req, res, next) => {
+//     authController.login(req,res, next);
+// })
+
+app.use('/auth', AuthRouter);
+app.use('/user', UserRouter);
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);

@@ -1,15 +1,35 @@
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import validator from 'validator';
 
 import User from '../models/user';
 
-const register = async (req, res) => {
+
+let AuthCtrl = {}
+AuthCtrl.register = async (req, res) => {
+
+    let firstName = req.body.firstName;
+    let lastName = req.body.lastName;
+    let username = req.body.username;
+
+    if (!firstName || !validator.isAlpha(firstName)) {
+        return res.status(422).send("First name cannot include numbers or be empty");
+    }
+
+    if (!validator.isAlpha(lastName)) {
+        return res.status(422).send("Last name cannot include numbers");
+    }
+
+    if (!username || !validator.isAscii(username)) {
+        return res.status(422).send("Username cannot be empty or have weird characters.");
+    }
+
     let user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        username: req.body.username
+        firstName,
+        lastName,
+        username
     });
-    User.register(user, req.body.password, (err) => {
+    await User.register(user, req.body.password, (err) => {
         if (err) return res.status(500).send(`Errorrr: ${err}`);
 
         console.log('User registered');
@@ -21,15 +41,14 @@ const register = async (req, res) => {
     })
 }
 
-const login = async(req, res, next) => {
+AuthCtrl.login = async(req, res, next) => {
     if (!req.body.username || !req.body.password) {
         return res.status(400).json({
             message: 'Incorrect input'
         })
     }
 
-
-    passport.authenticate('local', {
+    await passport.authenticate('local', {
         session: false,
         successRedirect: '/'
     }, (err, user, info) => {
@@ -46,13 +65,13 @@ const login = async(req, res, next) => {
                 username: user.username
             };
             const token = jwt.sign(payload, process.env.JWT_SECRET);
-            return res.status(200).json({user: user.username, token});
+            return res.status(200).json({
+                _id: user._id,
+                token
+            });
         })
     })(req,res);
 }
 
 
-export {
-    register,
-    login
-}
+export default AuthCtrl;
