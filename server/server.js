@@ -6,9 +6,7 @@ import './config/env';
 import './config/db';
 import './config/passport';
 
-import AuthRouter from './routes/auth.route';
-import UserRouter from './routes/user.route';
-import PostRouter from './routes/post.route';
+import APIRouter from './routes';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,23 +20,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
-app.use(
-    '/messages', 
-    passport.authenticate( 'jwt', { session:false }),
-    PostRouter
-);
-
-
-// app.post('/register', (req,res) => {
-//     authController.register(req, res);
-// })
-
-// app.post('/login', (req, res, next) => {
-//     authController.login(req,res, next);
-// })
-
-app.use('/auth', AuthRouter);
-app.use('/user', UserRouter);
+app.use('/api', APIRouter);
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);
