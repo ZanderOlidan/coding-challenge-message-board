@@ -1,0 +1,20 @@
+.messageEntry {
+    color: white;
+    background: #584764;
+    margin: 0;
+    padding: 3%;
+    border-top: 1px solid #3F334D; 
+    display: block;
+}
+
+.messageEntry h3, .messageEntry p {
+    margin: 0;
+}
+
+.messageEntry p {
+    padding: 1em;
+}
+
+.voteCount {
+    margin: 0 0.5em;
+}
