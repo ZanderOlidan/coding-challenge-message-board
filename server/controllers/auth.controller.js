@@ -33,18 +33,19 @@ AuthCtrl.register = async (req, res) => {
         if (err) return res.status(500).send(`Errorrr: ${err}`);
 
         console.log('User registered');
-        res.redirect('/login');
-        // const auth = passport.authenticate('local', {session: false});
-        // auth(req, res, () => {
-        //     res.status(200).send("Account created");
-        // })
+        // res.redirect('/login');
+        const auth = passport.authenticate('local', {session: false});
+        auth(req, res, () => {
+            res.status(200).send("Account created");
+        })
     })
 }
 
 AuthCtrl.login = async(req, res, next) => {
+    console.log(req.body)
     if (!req.body.username || !req.body.password) {
-        return res.status(400).json({
-            message: 'Incorrect input'
+        return res.status(401).json({
+            message: 'Incorrect input',
         })
     }
 

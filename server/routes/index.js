@@ -14,6 +14,6 @@ router.use(
 );
 
 router.use('/auth', AuthRouter);
-router.use('/user', UserRouter);
+router.use('/user', passport.authenticate( 'jwt', {session:false}), UserRouter);
 
 export default router

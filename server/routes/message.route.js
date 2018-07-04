@@ -27,6 +27,10 @@ router.get('/:messageId/votes', (req,res) => {
     MessageCtrl.votes_get(req, res);
 })
 
+router.get('/:messageId/votes/:userId', (req,res) => {
+    MessageCtrl.votes_user_get(req,res);
+})
+
 // Removes the vote
 router.delete('/:messageId/votes', (req,res) => {
     MessageCtrl.votes_delete(req, res);

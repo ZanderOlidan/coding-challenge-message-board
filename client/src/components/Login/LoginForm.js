@@ -42,7 +42,7 @@ const LoginForm = ({username, password, onFieldChange, onSubmit}) => {
             </FormGroup>
             <FormGroup>
                 <Col smOffset={2} sm={10}>
-                    <Button bsStyle="primary" onClick={onSubmit}>Sign in</Button>
+                    <Button type="submit" bsStyle="primary" onClick={onSubmit}>Sign in</Button>
                     <br />
                     New to the message board? <Button bsStyle="link">Register</Button>
                 </Col>

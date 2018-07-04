@@ -7,6 +7,7 @@ let MessageCtrl = {};
 
 MessageCtrl.index = async (req, res) => {
     // Set defaults when no query/params are set
+    // ?sort_by=votes||new&order=asc||desc
     const defaults = {
         sort: 'votes', //
         order: 'desc',  // values can be asc
@@ -45,11 +46,17 @@ MessageCtrl.index = async (req, res) => {
 }
 
 MessageCtrl.create = async (req, res) => {
+    console.log(req.body);
     await User.findById(req.body.user, (err, poster) => {
         if (err) res.status(500).send(err);
         
+        if (!poster) {
+            console.log("Error somewhere. User is not found")
+            return res.send("User not found")
+        }
         const message = new Message({
-            content: validator.escape(req.body.content),
+            // content: validator.escape(req.body.content),
+            content: req.body.content,
             user: poster._id
         });
 
@@ -70,7 +77,9 @@ MessageCtrl.create = async (req, res) => {
 MessageCtrl.single_get = async (req, res) => {
     const messageId = req.params.messageId;
     console.log(messageId);
-    await Message.findById(messageId).exec( (err, message) => {
+    await Message.findById(messageId)
+    .populate('user')
+    .exec( (err, message) => {
         if (err) {
             console.log(err); 
             return res.send(err);
@@ -142,6 +151,19 @@ MessageCtrl.votes_delete = async (req,res) => {
             })
 }
 
+MessageCtrl.votes_user_get = async (req,res) => {
+    const messageId = req.params.messageId;
+    const userId = req.params.userId;
+
+    await MessageVote
+            .findOne({"messageId": messageId,"userId": userId})
+            .exec( (err, vote) => {
+                if (err) res.send(err);
+
+                if (!vote) res.send({voteFlag: 0});
+                if (vote) res.send({voteFlag: vote.voteFlag});
+            })
+}
 MessageCtrl.update = async (req, res) => {
 
 }

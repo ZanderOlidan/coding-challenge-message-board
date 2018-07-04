@@ -9,7 +9,11 @@ class MessageSort extends Component {
                     <Form inline>
                         <FormGroup controlId="formSortOrder">
                             <ControlLabel>Sort by </ControlLabel>
-                            <FormControl componentClass="select">
+                            <FormControl 
+                                componentClass="select"
+                                value={this.props.sortBy} 
+                                onChange={this.props.setSorting}
+                            >
                                 <option value="new">new</option>
                                 <option value="votes">highest votes</option>
                             </FormControl>

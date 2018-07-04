@@ -2,11 +2,11 @@ import React from 'react';
 import UserInfo from './UserInfo';
 import MessageSort from './MessageSort';
 
-const Sidebar = () => {
+const Sidebar = ({sortBy, setSorting}) => {
     return (
         <div className="sidebar">
-            <UserInfo />
-            <MessageSort />
+            {/* <UserInfo /> */}
+            <MessageSort setSorting={setSorting} sortBy={sortBy}/>
         </div>
     )
 }

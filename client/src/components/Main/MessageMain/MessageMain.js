@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import CreateMessage from './CreateMessage/CreateMessage';
 import {
     ListGroup
@@ -7,60 +7,33 @@ import './MessageMain.css';
 import MessageEntry from './MessageEntry/MessageEntry';
 
 
-const store = [
-    {
-        "user": [
-            {
-                "_id": "5b390db9d5f8880151fb0485",
-                "firstName": "Zanana",
-                "lastName": "Molala",
-                "username": "akin",
-                "createdAt": "2018-07-01T17:22:02.279Z",
-                "updatedAt": "2018-07-01T17:22:02.279Z",
-                "__v": 0
-            }
-        ],
-        "_id": "5b3a8b835f2af7075afb0334",
-        "content": "TAKEMETOYOURHEART!",
-        "createdAt": "2018-07-02T20:30:59.064Z",
-        "updatedAt": "2018-07-02T20:30:59.064Z",
-        "__v": 0
-    },
-    {
-        "user": [
-            {
-                "_id": "5b390db9d5f8880151fb0485",
-                "firstName": "Zanana",
-                "lastName": "Molala",
-                "username": "akin",
-                "createdAt": "2018-07-01T17:22:02.279Z",
-                "updatedAt": "2018-07-01T17:22:02.279Z",
-                "__v": 0
-            }
-        ],
-        "_id": "5b3a8b985f2af7075afb0335",
-        "content": "NEW NEEEEEW Woweurwoweoow wo",
-        "createdAt": "2018-07-02T20:31:20.727Z",
-        "updatedAt": "2018-07-02T20:31:20.727Z",
-        "__v": 0
+class MessageMain extends Component {
+
+    addPost = (post) => {
+        this.setState({store: [post, ...this.state.store]})
     }
-]
-const MessageMain = () => {
-    return (
-        <div className="messageMain">
-            <CreateMessage />
-            {store.map( messagePost => {
-                return (
-                    <MessageEntry 
-                        key={messagePost._id}
-                        user={messagePost.user[0]} 
-                        content={messagePost.content}
-                        postDate={messagePost.createdAt}
-                    />
-                )
-            })}
-        </div>
-    )
+    render () {
+        return (
+            <div className="messageMain">
+                <CreateMessage 
+                    helper={this.props.helper}
+                    newPost={this.addPost}
+                />
+                {this.props.store.map( messagePost => {
+                    return (
+                        <MessageEntry 
+                            key={messagePost._id}
+                            user={messagePost.user[0]} 
+                            content={messagePost.content}
+                            postDate={messagePost.createdAt}
+                            messageId={messagePost._id}
+                            helper={this.props.helper}
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
 }
 
 export default MessageMain

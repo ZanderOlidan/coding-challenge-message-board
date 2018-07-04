@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import './config/env';
 import './config/db';
@@ -11,6 +12,9 @@ import APIRouter from './routes';
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors({
+    origin: process.env.CLIENT_DOMAIN
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
