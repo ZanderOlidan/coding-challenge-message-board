@@ -1,7 +1,6 @@
 import Message from '../models/message';
 import User from '../models/user';
 import MessageVote from '../models/messageVote';
-import validator from 'validator';
 
 let MessageCtrl = {};
 
@@ -27,7 +26,7 @@ MessageCtrl.index = async (req, res) => {
             },
             column: {
                 votes: 'votes',
-                date: 'updatedAt' // which attribute in db
+                date: 'createdAt' // which attribute in db
             }
         }
 
@@ -38,8 +37,8 @@ MessageCtrl.index = async (req, res) => {
 
     res.send(
         await Message.find()
-            .limit(limitEntries)
             .sort(sortOption(sortBy, orderBy))
+            .limit(limitEntries)
             .skip(offsetEntries)
             .populate('user')
     )
@@ -112,17 +111,21 @@ MessageCtrl.vote_post = async (req, res) => {
                 messageVote.save((err, vote) => {
                     if (err) return res.status(500).send("Can't save");
 
+                    Message.findById(messageId, (err, message) => {
+                        if (err) res.status(500).send(err);
+                        getVotes(messageId, (total) => {
+                            message.votes = total;
+                            message.save();
+                        });
+                    })
                     res.send(vote);
                 })
             })
 
 }
 
-MessageCtrl.votes_get = async (req,res) => {
-    const messageId = req.params.messageId;
-
-    // Count upvotes
-    await MessageVote
+const getVotes = (messageId, cb) => {
+    MessageVote
             .count({
                 messageId, 
                 voteFlag : 1
@@ -136,10 +139,20 @@ MessageCtrl.votes_get = async (req,res) => {
                             voteFlag : -1
                         })
                         .exec((err, downCount) => {
-
-                            res.send({votes: (upCount || 0) - (downCount || 0)});
+                            const total = (upCount || 0) - (downCount || 0);
+                            // res.send({votes: total});
+                            cb(total);
                         })
             })
+}
+
+MessageCtrl.votes_get = async (req,res) => {
+    const messageId = req.params.messageId;
+
+    const totalVotes = await getVotes(messageId, (value) => {
+        res.send({votes: value})
+    });
+    // Count upvotes
 }
 
 MessageCtrl.votes_delete = async (req,res) => {

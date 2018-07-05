@@ -1,15 +1,13 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, } from 'react';
 import {
     Grid,
     Row,
     Col,
-    Panel
 } from 'react-bootstrap';
 import './MainPage.css';
 import Header from './Header/Header';
 import Sidebar from './Sidebar';
 import MessageMain from './MessageMain/MessageMain';
-import jwtDecode from 'jwt-decode';
 import RequestService from '../Helper/RequestAPI';
 
 const messageCols = 8;
@@ -43,6 +41,11 @@ class MainPage extends Component {
         return this.helper.get(`/messages${sortDefs[val]}`)
             .then(store => this.setState({store}))
     }
+
+    addPost = (post) => {
+        this.setState({store: [post, ...this.state.store]})
+    }
+
     render() {
         const reqHelper = this.helper;
         const userData = reqHelper.getClaim();
@@ -55,7 +58,7 @@ class MainPage extends Component {
                             <Sidebar helper={reqHelper} setSorting={this.handleSorting} sortBy={this.state.sorting}/>
                         </Col>
                         <Col sm={messageCols}>
-                            <MessageMain helper={reqHelper} sort={this.state.sorting} store={this.state.store}/>
+                            <MessageMain helper={reqHelper} sort={this.state.sorting} store={this.state.store} addPost={this.addPost}/>
                         </Col>
                     </Row>
                 </Grid>

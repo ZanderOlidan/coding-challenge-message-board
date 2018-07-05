@@ -25,9 +25,6 @@ class Header extends Component {
                     <Navbar.Toggle />
                 </Navbar.Header>
                     <Navbar.Collapse>
-                    <Nav>
-                        <NavItem eventKey={1} href="/about">About</NavItem>
-                    </Nav>
                     <Nav pullRight>
                         <NavDropdown eventKey={1} title={username} id="userMenu">
                             <MenuItem eventKey={1.1}>Profile</MenuItem>

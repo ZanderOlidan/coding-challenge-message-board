@@ -7,6 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import LoginPage from './components/Login/LoginPage';
+import RegisterForm from './components/Login/RegisterForm';
 
 const PrivateRoute = ({ component : Component, ...rest }) => {
   return <Route {...rest} render={
@@ -23,6 +24,7 @@ class App extends Component {
         <div>
           <PrivateRoute path='/' component={MainPage} exact />
           <Route path='/login' component={LoginPage} />
+          <Route path='/register' component={RegisterForm} />
         </div>
       </Router>
     );

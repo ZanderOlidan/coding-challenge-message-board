@@ -1,23 +1,17 @@
-import React, { Fragment, Component } from 'react';
+import React, {  Component } from 'react';
 import CreateMessage from './CreateMessage/CreateMessage';
-import {
-    ListGroup
-} from 'react-bootstrap';
 import './MessageMain.css';
 import MessageEntry from './MessageEntry/MessageEntry';
 
 
 class MessageMain extends Component {
 
-    addPost = (post) => {
-        this.setState({store: [post, ...this.state.store]})
-    }
     render () {
         return (
             <div className="messageMain">
                 <CreateMessage 
                     helper={this.props.helper}
-                    newPost={this.addPost}
+                    newPost={this.props.addPost}
                 />
                 {this.props.store.map( messagePost => {
                     return (

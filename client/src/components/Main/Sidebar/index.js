@@ -1,5 +1,4 @@
 import React from 'react';
-import UserInfo from './UserInfo';
 import MessageSort from './MessageSort';
 
 const Sidebar = ({sortBy, setSorting}) => {

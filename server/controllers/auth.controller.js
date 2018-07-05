@@ -7,7 +7,7 @@ import User from '../models/user';
 
 let AuthCtrl = {}
 AuthCtrl.register = async (req, res) => {
-
+    console.log('register caught')
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let username = req.body.username;
@@ -36,7 +36,7 @@ AuthCtrl.register = async (req, res) => {
         // res.redirect('/login');
         const auth = passport.authenticate('local', {session: false});
         auth(req, res, () => {
-            res.status(200).send("Account created");
+            res.status(200).send({ success: 1});
         })
     })
 }

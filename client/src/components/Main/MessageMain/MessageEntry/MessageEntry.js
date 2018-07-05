@@ -6,7 +6,7 @@ const MessageEntry = ({user, content, postDate, messageId, helper}) => {
     return (
         <div className="messageEntry">
             <h3>{`${user.firstName} ${user.lastName}`} - <em>{user.username}</em></h3>
-            <p>{content}</p>
+            <p>{content}<br /><em>{new Date(postDate).toISOString().split('T')[0]}</em></p>
             <Votes messageId={messageId} helper={helper}/>
         </div>
     )

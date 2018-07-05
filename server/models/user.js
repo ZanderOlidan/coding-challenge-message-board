@@ -4,8 +4,14 @@ import passportLocalMongoose from 'passport-local-mongoose';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    firstName: String,
-    lastName: String,
+    firstName: {
+        type: String,
+        default: ''
+    },
+    lastName: {
+        type: String,
+        default: ''
+    },
     username: String
 }, {
     timestamps: true

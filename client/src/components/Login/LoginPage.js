@@ -8,6 +8,7 @@ import './LoginPage.css';
 import LoginForm from './LoginForm';
 import {withRouter} from 'react-router-dom';
 import Redirect from 'react-router-dom/Redirect';
+import RegisterForm from './RegisterForm';
 
 
 const domain = "http://localhost:5000/api";
@@ -15,8 +16,12 @@ class LoginPage extends Component {
     state = {
         username: '',
         password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName:'',
         isValidInput: true,
-        redirect: false
+        redirect: false,
+        register: false,
     }
 
     handleInputChange = (e) => {
@@ -60,6 +65,45 @@ class LoginPage extends Component {
         .catch(err => console.log(err))
     }
 
+    handleRegisterForm = () => {
+        this.setState({username: '', password: ''})
+        this.setState({register: !this.state.register})
+    }
+
+    handleRegisterSubmit = (e) => {
+        e.preventDefault();
+
+        if (!this.state.username || 
+            !this.state.password 
+        ) {
+            this.setState({isValidInput: false})
+            return;
+        }
+        fetch(`${domain}/auth/register`, {
+            method: 'post',
+            headers: {
+                'Accept' : 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                password: this.state.password,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName
+            })
+        })
+        .then(response => {
+            return {
+                status: response.status, 
+                body: response.json()
+            }
+        })
+        .then(data => {
+            if (data.status ===200) {
+                this.setState({register: false})
+            }
+        })
+    }
     render() {
         if (this.state.redirect) return <Redirect to="/" exact />
         return (
@@ -68,20 +112,31 @@ class LoginPage extends Component {
                 <Row>
                     <Col md={8} mdOffset={2} className="loginForm">
                         <Jumbotron>
-                            <h1>Hey there!</h1>
-                            <br />
                             { 
                                 this.state.isValidInput ? 
                                 "" :
-                                <p>Username or password is incorrect</p>
+                                <p>Input is incorrect. Try again</p>
                             }
-                            <LoginForm 
-                                username={this.state.username} 
-                                password={this.state.password} 
-                                onSubmit={this.handleSignIn}
-                                onFieldChange={this.handleInputChange}
-                                // onRegister={this.handleRegister}
-                            />
+                            {
+                                this.state.register ?
+                                <RegisterForm 
+                                    username={this.state.username}
+                                    password={this.state.password}
+                                    firstName={this.state.firstName}
+                                    lastName={this.state.lastName}
+                                    confirmPassword={this.state.confirmPassword}
+                                    onSubmit={this.handleRegisterSubmit}
+                                    onFieldChange={this.handleInputChange}
+                                    onLoginForm={this.handleRegisterForm}
+                                />
+                                :<LoginForm 
+                                    username={this.state.username} 
+                                    password={this.state.password} 
+                                    onSubmit={this.handleSignIn}
+                                    onFieldChange={this.handleInputChange}
+                                    onRegisterForm={this.handleRegisterForm}
+                                />
+                            }
                         </Jumbotron>
                     </Col>
                 </Row>
