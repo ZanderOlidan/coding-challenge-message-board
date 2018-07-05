@@ -5,6 +5,7 @@
 To run the server, have Docker installed.
 
     $ cd server
+    $ npm install
     $ docker-compose up
 
 A `.env.sample` file is included. Create your own `.env` file
@@ -14,5 +15,6 @@ A `.env.sample` file is included. Create your own `.env` file
 To run the client,
 
     $ cd client
+    $ npm install
     $ npm start
 
